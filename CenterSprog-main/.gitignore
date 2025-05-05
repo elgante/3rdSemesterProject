@@ -1,0 +1,17 @@
+﻿/Presentation/BlazorServer/bin/
+/Presentation/BlazorServer/obj/
+/Logic_Tier/Application/bin/
+/Logic_Tier/Application/obj/
+/Logic_Tier/Domain/bin/
+/Presentation/Domain/bin/
+/Logic_Tier/Domain/obj/
+/Presentation/Domain/obj/
+/Presentation/HttpClients/bin/
+/Presentation/HttpClients/obj/
+/Logic_Tier/WebAPI/bin/
+/Logic_Tier/WebAPI/obj/
+/Logic_Tier/.idea/
+/Presentation/.idea/
+**/bin/*
+**/obj/*
+

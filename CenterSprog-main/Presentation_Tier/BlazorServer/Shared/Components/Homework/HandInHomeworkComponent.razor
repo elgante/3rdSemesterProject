@@ -1,0 +1,128 @@
+﻿@using Domain.Models
+@using Domain.DTOs.HomeworkDTO
+@using HttpClients.ClientInterfaces
+@using HttpClients.Implementations
+@inject ILessonService lessonService
+@inject IHandInHomeworkService HandInHomeworkService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="input-container">
+    @if (!HomeworkSubmitted)
+    {
+        <input @bind="Answer" type="text" placeholder="Paste your answer here"/>
+        <button @onclick="HandInHomeworkAsync" type="button">
+            <strong>Hand in</strong>
+        </button>
+    }
+    else
+    {
+        <div class="feedback-container">
+        <button class="submitted-button" disabled>
+            <strong>Submitted</strong>
+        </button>
+        
+        @if (MyFeedback != null)
+        {
+            <SeeFeedbackComponent MyFeedback="@MyFeedback"/>
+        }
+        else
+        {
+            <p>No feedback was uploaded yet</p>
+
+        }
+        </div>
+    }
+    <div class="msg-container">
+        @if (Msg != null)
+        {
+            <div class="alert-danger alert mt-5">
+                @Msg
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public Lesson MyLesson { get; set; }
+
+    [Parameter]
+    public string ClassId { get; set; }
+
+    HandInHomework handInHomework { get; set; }
+
+    HomeworkHandInDTO Dto { get; set; }
+
+    Feedback MyFeedback { get; set; }
+
+    public bool HomeworkSubmitted { get; set; }
+    public string Answer { get; set; }
+    public string Msg { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Msg = null;
+        Answer = null;
+        HomeworkSubmitted = false;
+        MyFeedback = null;
+        handInHomework = new HandInHomework();
+
+        await FetchHandInAsync();
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task FetchHandInAsync()
+    {
+        Msg = null;
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var username = user.Identity?.Name;
+
+        try
+        {
+            handInHomework = await HandInHomeworkService.GetHandInByHomeworkIdAndStudentUsernameAsync(UserHttpClient.Jwt, MyLesson.Homework.Id, username);
+            MyFeedback = handInHomework.Feedback;
+            HomeworkSubmitted = handInHomework != null;
+        }
+        catch (Exception e)
+        {
+            HomeworkSubmitted = false;
+        }
+    }
+
+    private async Task HandInHomeworkAsync()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(Answer))
+            {
+                Msg = "Please provide an answer before submitting.";
+                StateHasChanged();
+                return;
+            }
+
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            var username = user.Identity?.Name;
+
+            await HandInHomeworkService.HandInHomework(UserHttpClient.Jwt, new HomeworkHandInDTO
+            {
+                HomeworkId = MyLesson.Homework.Id,
+                StudentUsername = username,
+                Answer = Answer
+            });
+
+            HomeworkSubmitted = true;
+            Msg = null;
+        }
+        catch (Exception ex)
+        {
+            Msg = ex.Message;
+        }
+    }
+
+}

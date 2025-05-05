@@ -1,0 +1,68 @@
+﻿@page "/login"
+@using HttpClients.ClientInterfaces
+@using Domain.Models
+@using Domain.Auth
+@inject IUserService userService
+@inject NavigationManager navMgr
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="card">
+            <h2>Center Sprog</h2>
+            <div class="field">
+                <label>Username:</label>
+                <input type="text" placeholder="Username" @bind="Username"/>
+            </div>
+            <div class="field">
+                <label style="text-align: center">Password:</label>
+                <input type="password" placeholder="Password" @bind="Password"/>
+            </div>
+            <div class="field">
+                <button class="loginbtn" @onclick="LoginAsync">Login</button>
+            </div>
+            @if (Msg != null)
+            {
+                <div class="alert-danger alert mt-5">
+                    @Msg
+                </div>
+            }
+        </div>
+    </NotAuthorized>
+<Authorized>
+    <div class="card">
+        <h3>Hello, @context.User.Identity.Name</h3>
+    </div>
+</Authorized>
+</AuthorizeView>
+
+@code {
+    public string Username;
+    public string Password;
+    public string? Msg;
+
+    private async Task LoginAsync()
+    {
+        Msg = null;
+        try
+        {
+            await userService.LoginAsync(Username, Password);
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.IsInRole("admin"))
+            {
+                navMgr.NavigateTo("/admin");
+            }
+            else
+            {
+                navMgr.NavigateTo("/my-classes");
+            }
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+}

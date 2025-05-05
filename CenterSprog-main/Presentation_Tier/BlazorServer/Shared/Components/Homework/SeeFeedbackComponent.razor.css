@@ -1,0 +1,22 @@
+﻿
+.submitted-container {
+    margin-right: 10px;
+}
+.submitted-container button {
+    padding: 8px 12px;
+    margin-right: auto;
+    border: none;
+    border-radius: 15px;
+}
+.submitted-button {
+    background-color: green;
+    color: white;
+}
+.msg-container{
+    margin-bottom: 10px;
+    color: red;
+}
+.modal-body {
+    padding: 0px;
+    margin-top: 20px;
+}

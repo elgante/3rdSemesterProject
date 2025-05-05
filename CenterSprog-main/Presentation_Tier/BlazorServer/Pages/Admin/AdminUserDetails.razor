@@ -1,0 +1,55 @@
+﻿@page "/admin/users/{username}"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using HttpClients.Implementations
+@attribute [Authorize("MustBeAdmin")]
+@inject IUserService UserService
+ 
+@if (DetailedUser != null)
+{
+    <div class="card mb-3" style="width: 18rem;">
+        <img src="https://xsgames.co/randomusers/avatar.php?g=pixel" class="card-img-top" alt="User avatar">
+        <div class="card-body">
+            <h5 class="card-title"><strong>Name: </strong>@DetailedUser.FirstName @DetailedUser.LastName</h5>
+            <p class="card-text"><strong>Username: </strong>@DetailedUser.Username </p>
+            <p class="card-text"><strong>Password: </strong>@DetailedUser.Password </p>
+            <p class="card-text"><strong>Email:</strong> @DetailedUser.Email</p>
+            <p class="card-text"><small class="text-muted">@DetailedUser.Role</small></p>
+        </div>
+    </div>
+}
+
+<a class="btn btn-outline-secondary mt-3" href="admin">Back to admin page</a>
+
+@if (Msg != null)
+{
+    <div class="mt-4 alert-danger alert">
+        @Msg
+    </div>
+}
+
+
+@code {
+    [Parameter] 
+    public string Username { get; set; }
+    public User DetailedUser { get; set; }
+    public string Msg { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        Msg = null;
+        DetailedUser = null;
+        try
+        {
+            DetailedUser = await UserService.GetAsync(Username, UserHttpClient.Jwt);
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+}

@@ -1,0 +1,18 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>Center Sprog</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu/>
+    </div>
+
+    <main class="d-flex flex-column">
+        <div class="top-row px-4">
+            <LoginButtons/>
+        </div>
+        <article class="d-flex flex-column flex-grow-1 content p-5">
+            @Body
+        </article>
+    </main>
+</div>

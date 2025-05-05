@@ -1,0 +1,80 @@
+syntax = "proto3";
+import "Protos/Lesson.proto";
+import "Protos/User.proto";
+
+option csharp_namespace = "gRPCClient";
+
+message ClassData {
+  optional string id = 1;
+  string title = 2;
+  string room = 3;
+  repeated LessonOverview lessons = 4;
+  repeated UserParticipant participants = 5;
+}
+
+message ClassEntityCreation{
+  string title = 1;
+  string room = 2;
+}
+
+message RequestCreateClassEntity{
+  ClassEntityCreation classEntityCreation = 1;
+}
+message ResponseCreateClassEntity{
+  ClassData classEntity = 1;
+}
+message RequestGetClassEntity{
+  string classId = 1;
+}
+message ResponseGetClassEntity{
+  ClassData classEntity = 1;
+}
+message RequestGetClassEntityByStudentUsername{
+  string studentUsername = 1;
+}
+message RequestGetClassEntities{
+  optional string username = 1;
+}
+message ResponseGetClassEntities{
+  repeated ClassData classEntities = 1;
+}
+message RequestUpdateClassParticipants{
+  string Id = 1;
+  repeated string participantsUsernames = 2;
+}
+
+message ResponseUpdateClassParticipants{
+  bool result = 1;
+}
+
+message RequestGetClassParticipants{
+  string classId = 1;
+  optional string role = 2;
+}
+
+message ResponseGetClassParticipants{
+  repeated UserParticipant participants= 1;
+}
+message RequestGetClassAttendance{
+  string classId = 1;
+}
+message ResponseGetClassAttendance{
+  repeated LessonAttendance lessonsAttendance = 1;
+}
+message RequestGetClassAttendanceByUsername{
+  string classId = 1;
+  string username = 2;
+}
+message ResponseGetClassAttendanceByUsername{
+  repeated LessonAttended lessons = 1;
+}
+
+service ClassEntityService{
+  rpc createClassEntity(RequestCreateClassEntity) returns (ResponseCreateClassEntity);
+  rpc getClassEntityById(RequestGetClassEntity) returns (ResponseGetClassEntity);
+  rpc getClassEntities(RequestGetClassEntities) returns (ResponseGetClassEntities);
+  rpc updateParticipants(RequestUpdateClassParticipants) returns (ResponseUpdateClassParticipants);
+  rpc getClassParticipants(RequestGetClassParticipants) returns (ResponseGetClassParticipants);
+  rpc getClassAttendance(RequestGetClassAttendance) returns (ResponseGetClassAttendance);
+  rpc getClassAttendanceByUsername(RequestGetClassAttendanceByUsername) returns (ResponseGetClassAttendanceByUsername);
+}

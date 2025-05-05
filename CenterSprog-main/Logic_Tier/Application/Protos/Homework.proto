@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option csharp_namespace = "gRPCClient";
+
+message Homework{
+  optional string id = 1;
+  int64 deadline = 2;
+  string title = 3;
+  string description = 4;
+}
+
+message RequestAddHomework{
+  string lessonId = 1;
+  Homework homework = 2;
+}
+message ResponseAddHomework{
+  Homework homework = 1;
+}
+
+service HomeworkService{
+  rpc addHomework(RequestAddHomework) returns (Homework);
+
+}

@@ -1,0 +1,143 @@
+﻿@page "/homeworks/{HomeworkId}"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs.FeedbackDTO
+@using HttpClients.Implementations
+@inject IHandInHomeworkService HandInService
+@inject IFeedbackService FeedbackService
+
+
+@if (HandIns == null)
+{
+    @if (Msg != null)
+    {
+        <div class="alert-danger alert mt-5">
+            @Msg
+        </div>
+    }
+}
+else if (!HandIns.Any())
+{
+    <p>No hand-ins were submitted for this homework</p>
+}
+else
+{
+    <div class="homework-cards">
+        @foreach (var handIn in HandIns)
+        {
+            <div class="homework-card" @onclick="() => GradeHandIn(handIn.StudentUsername, handIn.Answer)">
+                <div class="card-content">
+                    <h4>Student: @handIn.StudentUsername</h4>
+                    <p>@handIn.Answer</p>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<Modal ShowModal="@ShowModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h4 class="fw-bold">Give feedback</h4>
+        </div>
+
+        <div class="modal-body">
+            <p>
+                <strong>Student:</strong> @StudentUsername
+            </p>
+            <p>
+                <strong>Answer:</strong> @StudentAnswer
+            </p>
+
+            <div class="mb-3">
+                <label for="gradeInput" class="form-label">Grade</label>
+                <input type="number" class="form-control" id="gradeInput" @bind="FeedbackGrade" />
+            </div>
+            <div class="mb-3">
+                <label for="feedbackInput" class="form-label">Feedback</label>
+                <textarea class="form-control" id="feedbackInput" rows="3" @bind="@FeedbackComment"></textarea>
+            </div>
+
+            <div class="buttons-container">
+                <button class="btn btn-primary" @onclick="SendFeedbackAsync">Send Feedback</button>
+            </div>
+
+            @if (Msg != null)
+            {
+                <div class="alert-danger alert mt-5">
+                    @Msg
+                </div>
+            }
+        </div>
+    </div>
+
+</Modal>
+
+
+@code {
+
+    [Parameter]
+    public string HomeworkId { get; set; }
+
+    Homework Homework { get; set; }
+    IEnumerable<HandInHomework> HandIns { get; set; }
+    HandInHomework HandIn { get; set; }
+    AddFeedbackDTO Dto { get; set; }
+    public bool ShowModal { get; set; }
+    public string StudentUsername { get; set; }
+    public string StudentAnswer { get; set; }
+
+    public int FeedbackGrade { get; set; }
+    public string FeedbackComment { get; set; }
+    public string Msg { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Homework = new Homework();
+        HandIns = await HandInService.GetHandInsByHomeworkIdAsync(UserHttpClient.Jwt, HomeworkId);
+        HandIn = new HandInHomework();
+        ShowModal = false;
+        StudentUsername = null;
+        StudentAnswer = null;
+        FeedbackGrade = 0;
+        FeedbackComment = null;
+        Msg = null;
+
+
+        await base.OnInitializedAsync();
+    }
+
+    private void GradeHandIn(string username, string answer)
+    {
+        Msg = null;
+        ShowModal = true;
+        StudentUsername = username;
+        StudentAnswer = answer;
+
+
+        HandIn = HandIns.FirstOrDefault(h => h.StudentUsername == StudentUsername && h.Answer == StudentAnswer);
+    }
+
+    private async Task SendFeedbackAsync()
+    {
+        try
+        {
+            await FeedbackService.AddFeedbackAsync(UserHttpClient.Jwt, new AddFeedbackDTO
+                {
+                    HandInId = HandIn.Id,
+                    StudentUsername =
+                HandIn.StudentUsername,
+                    Grade = FeedbackGrade,
+                    Comment = FeedbackComment
+                });
+            Msg = "Feedback was successfully added";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Msg = ex.Message;
+        }
+    }
+
+}

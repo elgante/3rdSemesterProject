@@ -1,0 +1,59 @@
+﻿.add-icon-container {
+    position: absolute;
+    top: 40px; 
+    right: 60px;
+    cursor: pointer;
+}
+.modal-container {
+    position: relative;
+}
+.modal-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 15px;
+    border: none;
+}
+
+.close-button {
+    position: absolute;
+    right: 10px;
+    font-size: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: grey;
+}
+.button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.msg-container{
+    margin-top: 10px;
+    color: red;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+button {
+    border: none;
+    border-radius: 15px;
+}
+.modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    margin-bottom: 0.5rem;
+}

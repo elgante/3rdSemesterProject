@@ -1,0 +1,68 @@
+﻿.lesson-card {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    height: 80px;
+    cursor: pointer;
+    position: relative;
+}
+.lessons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 40px;
+    width: 100%;
+    position: relative;
+    
+}
+.class-container
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 40px;
+    width: 100%;
+    position: relative;
+}
+.class-card
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    height: 200px;
+    display:flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+.lesson-card img {
+    width: 50px;
+    height: 50px; 
+    margin-right: 10px; 
+
+}
+.class-container img {
+    width: 30px;
+    height: 30px;
+}
+.add-icon-container{
+    cursor: pointer;
+}
+
+.icons-container img.delete-button {
+    width: 35px;
+    height: 35px;
+}
+.icons-container img.update-button {
+    width: 30px;
+    height: 30px;
+}
+.icons-container{
+    position: absolute;
+    bottom: 25px;
+    right: 20px;
+    cursor: pointer;
+}

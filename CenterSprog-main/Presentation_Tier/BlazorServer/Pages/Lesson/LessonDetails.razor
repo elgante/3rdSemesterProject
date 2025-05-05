@@ -1,0 +1,122 @@
+﻿@page "/my-classes/{ClassId}/lessons/{LessonId}"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using HttpClients.Implementations
+@inject ILessonService lessonService
+@inject IHandInHomeworkService HandInHomeworkService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@if (Lesson != null)
+{
+    <LessonDetailComponent Lesson=@Lesson ClassId="@ClassId" />
+
+    @if (Lesson.Homework != null)
+    {
+        <div class="homework-container">
+            <div class="homework-card">
+                <div class="homework-header">
+                    <div class="icon-container">
+                        <img src="/homework.png" alt="Homework Icon" />
+                    </div>
+                    <div class="homework-header-content">
+                        <h3>Homework. @Lesson.Homework.Title</h3>
+                    </div>
+                </div>
+                <div class="homework-description">
+                    <p>@Lesson.Homework.Description</p>
+                    <p>
+                        <strong>Deadline:</strong>
+                        <DateDisplayComponent Date=@Lesson.Homework.Deadline />
+                    </p>
+                </div>
+                <AuthorizeView Policy="MustBeTeacher">
+                    <ViewSubmittedHomeworksComponent LessonId="@LessonId" ClassId="@ClassId" />
+                </AuthorizeView>
+
+
+                <AuthorizeView Policy="MustBeStudent">
+                    <HandInHomeworkComponent MyLesson="@Lesson" ClassId="@ClassId" />
+                </AuthorizeView>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="homework-container homework-no-content">
+            <div class="homework-card">
+                <div class="homework-header">
+                    <div class="icon-container">
+                        <img src="/homework.png" alt="Homework Icon" />
+                    </div>
+                    <div class="homework-header-content">
+                        <h3>Homework. </h3>
+                    </div>
+                    <AuthorizeView Policy="MustBeTeacher">
+                        @if (Lesson.Homework == null)
+                        {
+                            <AssignHomeworkComponent LessonId=@LessonId LessonDate=@Lesson.Date />
+                        }
+                    </AuthorizeView>
+
+                </div>
+                <div class="homework-description">
+                    <p>No homework for this lesson yet. Check back later!</p>
+                </div>
+            </div>
+        </div>
+    }
+}
+@if (Msg != null)
+{
+    <div class="alert-danger alert mt-5">
+        @Msg
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public string ClassId { get; set; }
+
+    [Parameter]
+    public string LessonId { get; set; }
+
+    Lesson Lesson { get; set; }
+    Homework Homework { get; set; }
+    User User { get; set; }
+    Feedback Feedback { get; set; }
+
+    public bool HomeworkSubmitted { get; set; }
+    public string Answer { get; set; }
+    public string? Msg { get; set; }
+    public string studentUsername { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchLessonAsync();
+        Msg = null;
+        Answer = null;
+        HomeworkSubmitted = false;
+        Feedback = new Feedback();
+        User = new User();
+        Homework = Lesson.Homework;
+        studentUsername = null;
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task FetchLessonAsync()
+    {
+        try
+        {
+            Lesson = await lessonService.GetByIdAsync(UserHttpClient.Jwt, LessonId);
+        }
+        catch (Exception e)
+        {
+            Msg = "MAYBE? " + e.Message;
+        }
+    }
+
+
+}

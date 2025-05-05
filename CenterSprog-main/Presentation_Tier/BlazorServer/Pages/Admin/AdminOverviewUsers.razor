@@ -1,0 +1,55 @@
+﻿@page "/admin/users"
+@using HttpClients.ClientInterfaces
+@using Domain.Models
+@using HttpClients.Implementations
+@inject IUserService UserService
+@inject NavigationManager NavManager
+@attribute [Authorize("MustBeAdmin")]
+
+<section>
+    <h3>Admin Overview Users</h3>
+    
+    @if (Users is not null)
+    {
+        <ul class="ms-0">
+            
+        @foreach (User user in Users)
+        {
+            <li class="list-group-item d-flex align-items-center justify-content-between">
+                <div>
+                    @user.FirstName @user.LastName
+                </div>
+                <a class="btn btn-outline-info" href="admin/users/@user.Username">
+                    See more
+                </a>
+            </li>
+        }
+        </ul>
+    }
+    
+    
+    
+    @if (Msg is not null)
+    {
+        <div class="mt-4 alert-danger alert">
+            @Msg
+        </div>
+    }
+    
+
+</section>
+<a class="btn btn-outline-secondary mt-3" href="admin">Back to admin page</a>
+
+@code {
+    public List<User> Users { get; set; }
+    public string Msg { get; set; }
+    
+    
+    protected  override async Task OnInitializedAsync()
+    {
+        Users = (List<User>)await UserService.GetAllAsync(UserHttpClient.Jwt);
+        await base.OnInitializedAsync();
+    }
+ 
+
+}

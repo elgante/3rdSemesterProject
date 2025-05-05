@@ -1,0 +1,6 @@
+sep3.project.data_tier
+sep3.project.data_tier.configs
+sep3.project.data_tier.entity
+sep3.project.data_tier.mappers
+sep3.project.data_tier.repository
+sep3.project.data_tier.service

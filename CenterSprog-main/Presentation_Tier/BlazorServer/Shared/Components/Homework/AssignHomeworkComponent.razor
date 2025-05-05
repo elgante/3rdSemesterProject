@@ -1,0 +1,89 @@
+﻿@using Domain.DTOs.HomeworkDTO
+@using HttpClients.ClientInterfaces
+@using HttpClients.Implementations
+@inject IHomeworkService HomeworkService
+@inject NavigationManager navMgr
+
+<div class="add-icon-container" @onclick="AddHomeworkModalAsync">
+    <img src="/add.png" alt="Add Icon" style="width: 30px;" />
+</div>
+
+<Modal ShowModal="@ShowModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h4 class="fw-bold">Add Homework</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="title" class="form-label">Title</label>
+                <input id="title" type="text" @bind="Dto.Title" />
+            </div>
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <input id="description" type="text" @bind="Dto.Description" />
+            </div>
+            <div class="form-group">
+                <label for="deadline" class="form-label">Deadline</label>
+                <input id="deadline" type="date" @bind="Date" />
+            </div>
+            <div class="button-container">
+                <button class="btn btn-primary" @onclick="AddHomeworkAsync">Add homework</button>
+            </div>
+            <div class="msg-container">
+                @if (Msg != null)
+                {
+                    <div class="alert-danger alert mt-5">
+                        @Msg
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</Modal>
+
+
+@code {
+
+    [Parameter]
+    public string LessonId { get; set; }
+
+    [Parameter]
+    public long LessonDate { get; set; }
+
+    public string? Msg { get; set; }
+    public HomeworkCreationDTO Dto { get; set; }
+    public DateTime Date { get; set; }
+    public bool ShowModal { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Msg = null;
+        Dto = new HomeworkCreationDTO { LessonId = LessonId };
+        Date = DateTime.Now;
+        ShowModal = false;
+
+        await base.OnInitializedAsync();
+    }
+
+    public async Task AddHomeworkModalAsync()
+    {
+        Msg = null;
+        ShowModal = true;
+    }
+
+    public async Task AddHomeworkAsync()
+    {
+        Msg = null;
+        try
+        {
+            Dto.Deadline = Date.ToFileTimeUtc();
+            await HomeworkService.CreateAsync(UserHttpClient.Jwt, Dto);
+            navMgr.NavigateTo(navMgr.Uri, forceLoad: true);
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+}

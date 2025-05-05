@@ -1,0 +1,128 @@
+﻿@page "/my-classes/{ClassId}"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using HttpClients.Implementations
+@inject ILessonService lessonService
+@inject IClassService classService
+@inject NavigationManager navMgr
+
+@if (SelectedClass == null)
+{
+    @if (Msg != null)
+    {
+        <div class="alert-danger alert mt-5">
+            @Msg
+        </div>
+    }
+}
+else
+{
+    <div class="class-container">
+        <div class="class-card">
+            <h2>@SelectedClass.Title @SelectedClass.Room</h2>
+
+            <div class="d-flex">
+                <AuthorizeView Policy="MustBeTeacher">
+                    <ClassAttendanceComponent ClassId=@ClassId />
+                </AuthorizeView>
+                <AuthorizeView Policy="MustBeStudent">
+                    <SingleUserAttendanceComponent ClassId=@ClassId />
+                </AuthorizeView>
+                <ParticipantsComponent ClassId=@ClassId />
+            </div>
+        </div>
+    </div>
+
+    <div class="lessons-container">
+        <AuthorizeView Policy="MustBeTeacher">
+            <div class="add-icon-container w-full d-flex align-items-center justify-content-center" @onclick="CreateLesson">
+                <img src="/add.png" alt="Add Icon" style="width: 30px" />
+            </div>
+        </AuthorizeView>
+        @if (SelectedClass.Lessons == null)
+        {
+            <span class="mt-3">Loading lessons...</span>
+        }
+        else if (!SelectedClass.Lessons.Any())
+        {
+            <p class="mt-3">No lessons available for this class</p>
+        }
+        else
+        {
+            @foreach (var lesson in SelectedClass.Lessons)
+            {
+                <div class="lesson-card d-flex justify-content-between align-items-center">
+                    <div @onclick="() => ViewLesson(lesson.Id)" class="d-flex">
+                        <div class="icon-container">
+                            <img src="/notebook.png" alt="Lesson Icon" />
+                        </div>
+                        <h4 class="ms-3 mb-0 align-self-center">@lesson.Topic.
+                            <DateDisplayComponent Date=@lesson.Date />
+                        </h4>
+                    </div>
+
+                    <div class="d-flex">
+                        <AuthorizeView Policy="MustBeTeacher">
+                            <div class="icons-container">
+                                <img class="update-button" src="/pen.png" alt="Update Icon"
+                                    @onclick="@(() => UpdateLesson(lesson.Id))" />
+                                <img class="delete-button" src="/bin.png" alt="Delete Icon"
+                                    @onclick="@(() => DeleteLessonById(lesson.Id))" />
+                            </div>
+                        </AuthorizeView>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public string ClassId { get; set; }
+
+    private ClassEntity SelectedClass { get; set; }
+    private string? Msg = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            SelectedClass = await classService.GetByIdAsync(UserHttpClient.Jwt, ClassId);
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+    private void ViewLesson(string lessonId)
+    {
+        navMgr.NavigateTo($"my-classes/{ClassId}/lessons/{lessonId}");
+    }
+
+    private void CreateLesson()
+    {
+        navMgr.NavigateTo($"my-classes/{ClassId}/create-lesson");
+    }
+
+    private void UpdateLesson(string lessonId)
+    {
+        navMgr.NavigateTo($"my-classes/{ClassId}/update-lesson/{lessonId}");
+    }
+
+    private async Task DeleteLessonById(string lessonId)
+    {
+        try
+        {
+            await lessonService.DeleteAsync(UserHttpClient.Jwt, lessonId);
+            await OnInitializedAsync();
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+}

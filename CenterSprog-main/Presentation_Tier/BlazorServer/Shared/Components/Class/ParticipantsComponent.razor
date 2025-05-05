@@ -1,0 +1,98 @@
+﻿@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs.ClassDTO
+@using HttpClients.Implementations
+@inject IClassService classService
+
+<button type="button" class="btn btn-secondary fw-bold ms-3" @onclick="@SeeParticipantsAsync">Participants <span class="oi oi-people"></span></button>
+<Modal ShowModal="ShowModal">
+    @if (Participants == null)
+    {
+        @if (Msg != null)
+        {
+            <div class="alert-danger alert mt-5">
+                @Msg
+            </div>
+        }
+    }
+    else if (!Participants.Any())
+    {
+        <p>No participants assigned for this class</p>
+    }
+    else
+    {
+        <div class="d-flex flex-column w-100">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Full Name</th>
+                    <th>Contact</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (User user in Participants.OrderByDescending(u => u.Role))
+                {
+                    <tr>
+                        <td>
+                            @if (user.Role.Equals("teacher"))
+                            {
+                                <span class="oi oi-text"></span>
+                            }
+                            else
+                            {
+                                <span class="oi oi-person"></span>
+                            }
+                        </td>
+                        <td>@user.FirstName @user.LastName</td>
+                        <td>@user.Email</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    @if (Msg != null)
+    {
+        <div class="alert-danger alert mt-5">
+            @Msg
+        </div>
+    }
+</Modal>
+
+@code {
+
+    [Parameter]
+    public string ClassId { get; set; }
+
+    public IEnumerable<User> Participants { get; set; }
+    public bool ShowModal { get; set; }
+    public string? Msg { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Participants = new List<User>();
+        Msg = null;
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task FetchParticipants()
+    {
+        try
+        {
+            Participants = await classService.GetAllParticipantsAsync(UserHttpClient.Jwt, new SearchClassParticipantsDTO { Id = ClassId });
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+    private async Task SeeParticipantsAsync()
+    {
+        await FetchParticipants();
+        ShowModal = true;
+    }
+
+}

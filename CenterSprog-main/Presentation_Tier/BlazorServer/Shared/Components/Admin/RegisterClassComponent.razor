@@ -1,0 +1,56 @@
+﻿@using Domain.DTOs.UserDTO
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs.ClassDTO
+@using HttpClients.Implementations
+@inject NavigationManager NavManager
+@inject IClassService ClassService
+
+<section class="d-flex flex-column">
+
+    <p>Register class</p>
+    <div class="mb-3">
+        <label for="titleInput" class="form-label">Title</label>
+        <input type="text" class="form-control" id="titleInput" @bind="Dto.Title">
+    </div>
+    <div class="mb-3">
+        <label for="roomInput" class="form-label">Room</label>
+        <input type="text" class="form-control" id="roomInput" @bind="Dto.Room">
+    </div>
+
+
+    <button class="mt-5 btn btn-outline-success" type="submit" @onclick="RegisterClassAsync">Register</button>
+
+    @if (Msg is not null && Msg != "")
+    {
+        <div class="mt-4 alert-danger alert">
+            @Msg
+        </div>
+    }
+</section>
+
+@code {
+    public string? Msg;
+    public ClassCreationDTO Dto;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Msg = null;
+        Dto = new ClassCreationDTO();
+
+        await base.OnInitializedAsync();
+    }
+
+    public async Task RegisterClassAsync()
+    {
+        try
+        {
+            ClassEntity createdClass = await ClassService.CreateAsync(UserHttpClient.Jwt, Dto);
+            NavManager.NavigateTo($"/my-classes/{createdClass.Id}");
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+}

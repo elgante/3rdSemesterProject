@@ -1,0 +1,80 @@
+﻿@using HttpClients.ClientInterfaces
+@using Domain.DTOs.UserDTO
+@using HttpClients.Implementations
+@inject IClassService ClassService;
+
+<div class="d-flex align-items-center">
+    <button type="button" class="btn btn-warning fw-bold w-auto" @onclick="@SeeClassAttendanceAsync">Attendance <span class="oi oi-calendar"></span></button>
+</div>
+<Modal ShowModal="ShowModal">
+
+    @if (!Users.Any())
+    {
+        <p>No students assigned for this class</p>
+    }
+    else
+    {
+        <h4 class="fw-bold">Class Attendance</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Contact</th>
+                <th>Total Absence</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var user in Users.OrderBy(u=>u.FirstName))
+            {
+                <tr>
+                    <td>@user.FirstName @user.LastName</td>
+                    <td>@user.Email</td>
+                    <td>@user.TotalAbsence.ToString()%</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    @if (Msg != null)
+    {
+        <div class="alert-danger alert mt-5">
+            @Msg
+        </div>
+    }
+</Modal>
+
+@code {
+
+    [Parameter]
+    public string ClassId { get; set; }
+
+    public bool ShowModal { get; set; }
+    public string? Msg { get; set; }
+    public IEnumerable<UserAttendanceDTO> Users { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Msg = null;
+        Users = new List<UserAttendanceDTO>();
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task FetchClassAttendanceAsync()
+    {
+        try
+        {
+            Users = await ClassService.GetClassAttendanceAsync(UserHttpClient.Jwt, ClassId);
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+    private async Task SeeClassAttendanceAsync()
+    {
+        await FetchClassAttendanceAsync();
+        ShowModal = true;
+    }
+}

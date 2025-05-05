@@ -1,0 +1,50 @@
+﻿h1, h2, h3, h4, h5, h6{
+    font-weight: bold;
+}
+
+.lesson-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 40px;
+    width: 100%;
+}
+
+.lesson-card {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.lesson-header {
+    display: flex;
+    align-items: center;
+}
+
+.lesson-header img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+.homework-header img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+.lesson-description h4 {
+    font-weight: normal;
+}
+.lesson-header-content {
+    display: flex;
+    flex-direction: column;
+}
+
+p {
+    margin-top: 20px;
+}

@@ -1,0 +1,62 @@
+﻿@using Domain.DTOs.UserDTO
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using HttpClients.Implementations
+@inject NavigationManager NavManager
+@inject IUserService UserService
+
+<section class="d-flex flex-column">
+
+    <p>Register user</p>
+    <div class="mb-3">
+        <label for="firstNameInput" class="form-label">First name</label>
+        <input type="text" class="form-control" id="firstNameInput" @bind="Dto.FirstName">
+    </div>
+    <div class="mb-3">
+        <label for="lastNameInput" class="form-label">Last name</label>
+        <input type="text" class="form-control" id="lastNameInput" @bind="Dto.LastName">
+    </div>
+    <div class="mb-3">
+        <label for="emailInput" class="form-label">Email address</label>
+        <input type="text" class="form-control" id="emailInput" placeholder="name@example.com" @bind="Dto.Email">
+    </div>
+    <select @bind="Dto.Role" class="form-select" aria-label="Role selection">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+    </select>
+
+    <button class="mt-5 btn btn-outline-success" type="submit" @onclick="RegisterUserAsync">Register</button>
+
+    @if (Msg is not null && Msg != "")
+    {
+        <div class="mt-4 alert-danger alert">
+            @Msg
+        </div>
+    }
+</section>
+
+@code {
+    public string? Msg;
+    public UserCreationDTO Dto;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Msg = null;
+        Dto = new UserCreationDTO();
+        Dto.Role = "student";
+        await base.OnInitializedAsync();
+    }
+
+    public async Task RegisterUserAsync()
+    {
+        try
+        {
+            User createdUser = await UserService.CreateUserAsync(Dto, UserHttpClient.Jwt);
+            NavManager.NavigateTo($"admin/users/{createdUser.Username}");
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+}

@@ -1,0 +1,64 @@
+﻿@page "/my-classes"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs.ClassDTO
+@using HttpClients.Implementations
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IClassService classService
+@inject NavigationManager navMgr
+
+@if (Classes == null)
+{
+    @if (Msg != null)
+    {
+        <div class="alert-danger alert mt-5">
+            @Msg
+        </div>
+    }
+}
+else if (!Classes.Any())
+{
+    <p>No classes to display</p>
+}
+else
+{
+    <div class="classes-container">
+        @foreach (var _class in Classes)
+        {
+            <div class="class-card" @onclick="() => ViewClass(_class.Id)">
+                <div class="class-header">
+                    <h4 class="class-text">@_class.Title @_class.Room</h4>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code
+{
+    public IEnumerable<ClassEntity>? Classes;
+    public string Msg { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        string username = user.Identity?.Name;
+        Msg = null;
+        try
+        {
+            Classes = await classService.GetAllAsync(UserHttpClient.Jwt, new SearchClassDTO{Username = username});
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+        await base.OnInitializedAsync();
+    }
+
+    private void ViewClass(string classId)
+    {
+        navMgr.NavigateTo($"/my-classes/{classId}");
+    }
+}

@@ -1,0 +1,14 @@
+﻿@page "/admin"
+@attribute [Authorize("MustBeAdmin")]
+
+<h3>Admin Page</h3>
+
+<section class="mt-3 d-flex flex-row flex-wrap w-100 h-100">
+    <a class="d-flex align-items-center justify-content-center fs-3 w-50 flex-grow-1 btn btn-outline-primary" href="admin/register">Register users/classes</a>
+    <a class="d-flex align-items-center justify-content-center fs-3 w-50 flex-grow-1 btn btn-outline-primary" href="admin/assign">Assign users/classes</a>
+    <a class="d-flex align-items-center justify-content-center fs-3 w-50 flex-grow-1 btn btn-outline-primary" href="admin/users">View users</a>
+</section>
+
+@code {
+    
+}

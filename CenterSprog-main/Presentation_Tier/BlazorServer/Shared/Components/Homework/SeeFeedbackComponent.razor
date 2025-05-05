@@ -1,0 +1,50 @@
+﻿@using Domain.Models
+@using Domain.DTOs.HomeworkDTO
+@using HttpClients.ClientInterfaces
+@inject ILessonService lessonService
+@inject IHandInHomeworkService HandInHomeworkService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IFeedbackService FeedbackService
+
+<div class="submitted-container">
+    <button @onclick="SeeFeedbackAsync" type="button">
+        <strong>See feedback</strong>
+    </button>
+</div>
+
+
+<Modal ShowModal="@(ShowModal && MyFeedback != null)">
+    <div class="modal-container">
+        <h4 class="fw-bold">Feedback</h4>
+        <div class="modal-body">
+            <p>
+                <strong>Grade:</strong> @MyFeedback.Grade
+            </p>
+            <p>
+                <strong>Comment:</strong> @MyFeedback.Comment
+            </p>
+        </div>
+    </div>
+</Modal>
+
+@code {
+
+    [Parameter]
+    public Feedback MyFeedback { get; set; }
+    
+    public bool ShowModal { get; set; }  
+
+    protected override async Task OnInitializedAsync()
+    {
+        ShowModal = false;
+        
+        await base.OnInitializedAsync();
+    }
+
+
+    private void SeeFeedbackAsync()
+    {
+        ShowModal = true;
+    }
+    
+}

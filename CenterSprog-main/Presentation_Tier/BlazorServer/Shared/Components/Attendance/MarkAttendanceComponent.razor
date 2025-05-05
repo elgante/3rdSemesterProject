@@ -1,0 +1,138 @@
+﻿@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs.LessonDTO
+@using Domain.DTOs.ClassDTO
+@using HttpClients.Implementations
+@inject ILessonService lessonService;
+@inject IClassService classService
+
+
+<div class="d-flex align-items-center">
+    <button type="button" class="btn btn-warning fw-bold w-auto" @onclick="@SeeAttendeesAsync">Mark Attendance <span
+            class="oi oi-calendar"></span></button>
+    @if (Success is not null)
+    {
+        <div class="alert-success alert ms-3 mb-0">
+            @Success
+        </div>
+    }
+</div>
+<Modal ShowModal="ShowModal">
+
+    @if (!Attendees.Any())
+    {
+        <p>No participants assigned for this class</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var attendee in Attendees.OrderBy(a => a.FirstName))
+                {
+                    <tr>
+                        <td>@attendee.FirstName @attendee.LastName</td>
+                        <td>
+                            <input type="checkbox" @bind="SelectedUsers[attendee.Username]" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button class="btn btn-primary" @onclick="MarkAttendanceAsync">Submit</button>
+    }
+    @if (Msg != null)
+    {
+        <div class="alert-danger alert mt-5">
+            @Msg
+        </div>
+    }
+</Modal>
+
+@code {
+    [Parameter]
+    public string LessonId { get; set; }
+    [Parameter]
+    public string ClassId { get; set; }
+
+    public bool ShowModal { get; set; }
+    public string? Msg { get; set; }
+    public string? Success { get; set; }
+    public Dictionary<string, bool> SelectedUsers { get; set; }
+    public List<string> SelectedUserList { get; set; }
+    public IEnumerable<User> MarkedAttendees { get; set; }
+    public IEnumerable<User> Attendees { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Msg = null;
+        Success = null;
+        SelectedUsers = new Dictionary<string, bool>();
+        SelectedUserList = new List<string>();
+        MarkedAttendees = new List<User>();
+        Attendees = new List<User>();
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task FetchMarkedAttendeesAsync()
+    {
+        try
+        {
+            MarkedAttendees = await lessonService.GetAttendanceAsync(UserHttpClient.Jwt, LessonId);
+            Attendees = await classService.GetAllParticipantsAsync(UserHttpClient.Jwt, new SearchClassParticipantsDTO
+                {
+                    Id = ClassId,
+                    Role = "student"
+                });
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+    private async Task SeeAttendeesAsync()
+    {
+        await FetchMarkedAttendeesAsync();
+
+        if (MarkedAttendees != null)
+        {
+            foreach (var attendee in Attendees)
+            {
+                var isSelected = MarkedAttendees.Any(markedAttendee => string.Equals(markedAttendee.Username, attendee.Username,
+                StringComparison.OrdinalIgnoreCase));
+                SelectedUsers[attendee.Username] = isSelected;
+            }
+        }
+        ShowModal = true;
+    }
+
+    private async Task MarkAttendanceAsync()
+    {
+        SelectedUserList = SelectedUsers.Where(kvp => kvp.Value).Select(kvp => kvp.Key).ToList();
+        try
+        {
+            var amountOfAttendees = await lessonService.MarkAttendanceAsync(UserHttpClient.Jwt, new MarkAttendanceDTO
+                {
+                    LessonId =
+                LessonId,
+                    StudentUsernames = SelectedUserList
+                });
+            Success = $"Attendance was successfully marked. {amountOfAttendees}/{Attendees.Count()} attendees";
+            ShowModal = false;
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+}

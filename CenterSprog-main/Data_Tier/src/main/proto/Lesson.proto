@@ -1,0 +1,113 @@
+syntax = "proto3";
+import "Homework.proto";
+import "User.proto";
+
+option java_multiple_files = true;
+option java_package = "sep3.project.protobuf";
+option java_outer_classname = "LessonProto";
+
+message LessonData{
+  optional string id = 1;
+  int64 date = 2;
+  string topic = 3;
+  string description = 4;
+  optional Homework homework = 5;
+  repeated UserParticipant attendees = 6;
+}
+
+message LessonOverview{
+  string id = 1;
+  int64 date = 2;
+  string topic = 3;
+  string description = 4;
+}
+
+message LessonAttendance{
+  string id = 1;
+  repeated UserParticipant participants = 2;
+}
+
+message LessonAttended{
+  string id = 1;
+  int64 date = 3;
+  string topic = 4;
+}
+
+message RequestCreateLesson{
+  string classId = 1;
+  LessonData lesson = 2;
+}
+message ResponseCreateLesson{
+  LessonData lesson = 1;
+}
+message RequestMarkAttendance{
+  string lessonId = 1;
+  repeated string usernames = 2;
+}
+message ResponseMarkAttendance{
+  int32 amountOfParticipants = 1;
+}
+message RequestGetAttendance{
+  string lessonId = 1;
+}
+message ResponseGetAttendance{
+  repeated UserParticipant participants = 1;
+}
+message RequestGetLessonsByClassId{
+  string classId = 1;
+}
+message ResponseGetLessonsByClassId{
+  repeated LessonData lessons = 1;
+}
+message RequestGetLessonById{
+  string lessonId = 1;
+}
+message ResponseGetLessonById{
+  LessonData lesson = 1;
+}
+
+message RequestGetLessonExtendedByHomeworkHandInFeedback{
+  string lessonId = 1;
+  string username = 2;
+}
+
+
+message RequestDeleteLesson{
+  string lessonId = 1;
+}
+message ResponseDeleteLesson {
+    enum Status {
+    OK = 0;
+    FAILED = 1;
+   }
+  Status status = 1;
+  string message = 2;
+}
+
+message RequestUpdateLesson{
+  string id = 1;
+  LessonData lesson = 2;
+}
+message ResponseUpdateLesson {
+  enum Status {
+    OK = 0;
+    FAILED = 1;
+  }
+  Status status = 1;
+  string message = 2;
+
+}
+service LessonService{
+  rpc CreateLesson(RequestCreateLesson) returns (ResponseCreateLesson);
+  rpc markAttendance(RequestMarkAttendance) returns (ResponseMarkAttendance);
+  rpc getAttendance(RequestGetAttendance) returns (ResponseGetAttendance);
+  rpc getLessonById(RequestGetLessonById) returns (ResponseGetLessonById);
+  rpc getLessonsByClassId(RequestGetLessonsByClassId) returns (ResponseGetLessonsByClassId);
+  rpc deleteLesson(RequestDeleteLesson) returns ( ResponseDeleteLesson);
+  rpc updateLesson(RequestUpdateLesson) returns ( ResponseUpdateLesson);
+}
+
+
+
+
+

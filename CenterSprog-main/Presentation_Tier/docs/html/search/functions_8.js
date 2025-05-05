@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['lesson_0',['lesson',['../class_domain_1_1_models_1_1_lesson.html#ad07b7a211da4f317e505c6762a1fc3b6',1,'Domain.Models.Lesson.Lesson(string id, long date, string description, string topic, Homework homework, List&lt; User &gt; attendees)'],['../class_domain_1_1_models_1_1_lesson.html#a21b9983147439f0da32cd5b79f37f965',1,'Domain.Models.Lesson.Lesson(string id, long date, string description, string topic)'],['../class_domain_1_1_models_1_1_lesson.html#a0269b4be35b9200742e868cfcb29ae33',1,'Domain.Models.Lesson.Lesson()']]],
+  ['lessonhttpclient_1',['LessonHttpClient',['../class_http_clients_1_1_implementations_1_1_lesson_http_client.html#a5744c841440a2a3e4351b6788ac47b60',1,'HttpClients::Implementations::LessonHttpClient']]],
+  ['loginasync_2',['loginasync',['../interface_http_clients_1_1_client_interfaces_1_1_i_user_service.html#af4ee3c0a087b54af1b08ecef6b4a68d3',1,'HttpClients.ClientInterfaces.IUserService.LoginAsync()'],['../class_http_clients_1_1_implementations_1_1_user_http_client.html#a3628c070337ae35bb5bddaeb0e25a8a1',1,'HttpClients.Implementations.UserHttpClient.LoginAsync()']]],
+  ['logoutasync_3',['logoutasync',['../interface_http_clients_1_1_client_interfaces_1_1_i_user_service.html#a40516522776106a1e8e04bdfcd6fdd1c',1,'HttpClients.ClientInterfaces.IUserService.LogoutAsync()'],['../class_http_clients_1_1_implementations_1_1_user_http_client.html#aa670668cc7fe07dc73665670539dcc6f',1,'HttpClients.Implementations.UserHttpClient.LogoutAsync()']]]
+];

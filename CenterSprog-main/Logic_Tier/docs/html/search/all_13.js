@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['validateclasscreation_0',['ValidateClassCreation',['../class_application_1_1_logic_1_1_class_logic.html#a9fa2f01218866a13cfde69bb6ea67bc7',1,'Application::Logic::ClassLogic']]],
+  ['validateclasscreation_5finvaliddata_5fexceptionsthrown_1',['ValidateClassCreation_InvalidData_ExceptionsThrown',['../classx_unit_1_1_tests_1_1_class_logic_tests.html#a0e8f5c30f4ee4c67395deaf074b6bbb9',1,'xUnit::Tests::ClassLogicTests']]],
+  ['validateclasscreation_5fvaliddata_5fnoexceptionsthrown_2',['ValidateClassCreation_ValidData_NoExceptionsThrown',['../classx_unit_1_1_tests_1_1_class_logic_tests.html#ad83026f3311337e81be0c76e94a95133',1,'xUnit::Tests::ClassLogicTests']]],
+  ['validatecredentials_3',['ValidateCredentials',['../class_application_1_1_logic_1_1_user_logic.html#a74177e40b092651542fef0e56cd08281',1,'Application::Logic::UserLogic']]],
+  ['validatecredentials_5finvaliddata_5fexceptionsthrown_4',['ValidateCredentials_InvalidData_ExceptionsThrown',['../classx_unit_1_1_tests_1_1_user_logic_tests.html#ae3f9ffd4b6c246019536e6892fa0ddcb',1,'xUnit::Tests::UserLogicTests']]],
+  ['validatecredentials_5fvaliddata_5fnoexceptionsthrown_5',['ValidateCredentials_ValidData_NoExceptionsThrown',['../classx_unit_1_1_tests_1_1_user_logic_tests.html#aec1b281dba5a09ca96b1b2d25b9b8250',1,'xUnit::Tests::UserLogicTests']]],
+  ['validateemail_6',['ValidateEmail',['../class_application_1_1_logic_1_1_user_logic.html#adc82f836b7109ab48707f3ef4040417b',1,'Application::Logic::UserLogic']]],
+  ['validateemail_5finvaliddata_5fexceptionsthrown_7',['ValidateEmail_InvalidData_ExceptionsThrown',['../classx_unit_1_1_tests_1_1_user_logic_tests.html#af754a184131abc230d32c7b2d74e80ee',1,'xUnit::Tests::UserLogicTests']]],
+  ['validateemail_5fvaliddata_5fnoexceptionsthrown_8',['ValidateEmail_ValidData_NoExceptionsThrown',['../classx_unit_1_1_tests_1_1_user_logic_tests.html#ae8f131d66e74131989e2cc9b2aa49c45',1,'xUnit::Tests::UserLogicTests']]],
+  ['validatefeedbackcreation_9',['ValidateFeedbackCreation',['../class_application_1_1_logic_1_1_feedback_logic.html#a76e9d41eeeaf428fba255aa18f393820',1,'Application::Logic::FeedbackLogic']]],
+  ['validatefeedbackcreation_5finvaliddata_5fexceptionsthrown_10',['ValidateFeedbackCreation_InvalidData_ExceptionsThrown',['../classx_unit_1_1_tests_1_1_feedback_logic_tests.html#aa962dea5e10d17c0e12a232e43d7084b',1,'xUnit::Tests::FeedbackLogicTests']]],
+  ['validatefeedbackcreation_5fvaliddata_5fnoexceptionsthrown_11',['ValidateFeedbackCreation_ValidData_NoExceptionsThrown',['../classx_unit_1_1_tests_1_1_feedback_logic_tests.html#abd7bbf7c09f0a43ec391f5fc0e7c1c1d',1,'xUnit::Tests::FeedbackLogicTests']]],
+  ['validatehandincreation_12',['ValidateHandInCreation',['../class_application_1_1_logic_1_1_hand_in_homework_logic.html#ac1fc45a30b17b040ff0986c115f3c3de',1,'Application::Logic::HandInHomeworkLogic']]],
+  ['validatehandincreation_5finvaliddata_5fexceptionsthrown_13',['ValidateHandInCreation_InvalidData_ExceptionsThrown',['../classx_unit_1_1_tests_1_1_hand_in_homework_logic_tests.html#af1a3f80fdbe1d87b34f5848f2b8a36f3',1,'xUnit::Tests::HandInHomeworkLogicTests']]],
+  ['validatehandincreation_5fvaliddata_5fnoexceptionsthrown_14',['ValidateHandInCreation_ValidData_NoExceptionsThrown',['../classx_unit_1_1_tests_1_1_hand_in_homework_logic_tests.html#a0b57b256b24c075d2256656149d5f3c2',1,'xUnit::Tests::HandInHomeworkLogicTests']]],
+  ['validatehomeworkcreation_15',['ValidateHomeworkCreation',['../class_application_1_1_logic_1_1_homework_logic.html#a706e58d8c1ec758619a643d46188e09c',1,'Application::Logic::HomeworkLogic']]],
+  ['validatehomeworkcreation_5finvaliddata_5fexceptionsthrown_16',['ValidateHomeworkCreation_InvalidData_ExceptionsThrown',['../classx_unit_1_1_tests_1_1_homework_logic_tests.html#a791f8fff4547f7b905d009edf73ab1d5',1,'xUnit::Tests::HomeworkLogicTests']]],
+  ['validatehomeworkcreation_5fvaliddata_5fnoexceptionsthrown_17',['ValidateHomeworkCreation_ValidData_NoExceptionsThrown',['../classx_unit_1_1_tests_1_1_homework_logic_tests.html#a53f51696c8b904b04dd6ced4ed4e1b07',1,'xUnit::Tests::HomeworkLogicTests']]],
+  ['validatelessoncreationandupdate_18',['ValidateLessonCreationAndUpdate',['../class_application_1_1_logic_1_1_lesson_logic.html#a6adf4673c3f782a45eeb1f0b9361ecef',1,'Application::Logic::LessonLogic']]],
+  ['validatelessoncreationandupdate_5finvaliddata_5fexceptionsthrown_19',['ValidateLessonCreationAndUpdate_InvalidData_ExceptionsThrown',['../classx_unit_1_1_tests_1_1_lesson_logic_tests.html#ae80bd1fbe057983700314a1ef7021c02',1,'xUnit::Tests::LessonLogicTests']]],
+  ['validatelessoncreationandupdate_5fvaliddata_5fnoexceptionsthrown_20',['ValidateLessonCreationAndUpdate_ValidData_NoExceptionsThrown',['../classx_unit_1_1_tests_1_1_lesson_logic_tests.html#aca7cb83e4bc578285be110f81eac2a56',1,'xUnit::Tests::LessonLogicTests']]],
+  ['validateusercreation_21',['ValidateUserCreation',['../class_application_1_1_logic_1_1_user_logic.html#acd9d3bc668cd5ef4b2a4e2370b25c079',1,'Application::Logic::UserLogic']]],
+  ['validateusercreation_5finvaliddata_5fexceptionsthrown_22',['ValidateUserCreation_InvalidData_ExceptionsThrown',['../classx_unit_1_1_tests_1_1_user_logic_tests.html#a9002878f81ac08becf876b070e15cc15',1,'xUnit::Tests::UserLogicTests']]],
+  ['validateusercreation_5fvaliddata_5fnoexceptionsthrown_23',['ValidateUserCreation_ValidData_NoExceptionsThrown',['../classx_unit_1_1_tests_1_1_user_logic_tests.html#ac759971558b6917554d3ee6f13c38691',1,'xUnit::Tests::UserLogicTests']]]
+];

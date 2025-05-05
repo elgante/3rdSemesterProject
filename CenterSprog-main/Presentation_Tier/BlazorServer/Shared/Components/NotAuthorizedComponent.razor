@@ -1,0 +1,23 @@
+﻿
+<div class="display-1">
+    You are not authorized to view these resources.
+</div>
+
+<AuthorizeView>
+    
+    <Authorized>
+        <div class="alert alert-danger">
+            You user is lacking privileges.
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="alert alert-danger">
+            <a class="btn btn-outline-danger" href="/login">Log in here</a>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    
+}

@@ -1,0 +1,173 @@
+﻿@page "/admin/assign"
+@using Domain.Models
+@using Domain.DTOs.ClassDTO
+@using HttpClients.ClientInterfaces
+@using HttpClients.Implementations
+@inject IClassService ClassService
+@inject IUserService UserService
+@attribute [Authorize("MustBeAdmin")]
+
+<h3>AssignClass</h3>
+
+<section class="d-flex flex-column">
+
+
+    <select class="form-select" aria-label="Class selection" @onchange="HandleClassChangeAsync">
+        @if (MyClasses.Any())
+        {
+            <option selected value="">Select class to manage</option>
+            @foreach (var classEntity in MyClasses)
+            {
+                <option value="@classEntity.Id">
+                    @classEntity.Title
+                </option>
+            }
+        }
+        else
+        {
+            <option selected value="">No classes exists. Please add them first!</option>
+        }
+
+    </select>
+
+    <div class="d-flex flex-column input-group container mt-4 mh-100">
+        @if (Users.Any() && CheckDictionary.Count == Users.Count())
+        {
+            <h5 class="lead">Users to reassign:</h5>
+            @foreach(User user in Users)
+            { 
+                <div class="d-flex flex-row pt-1">
+
+                    <input @bind="CheckDictionary[user.Username]" class="form-check-input" id="userCheck-@user.Username" type="checkbox"/>
+
+
+                    <label class="ms-2 form-check-label" for="userCheck-@user.Username">
+                        <span class="text-muted">@user.Role.ToUpper()</span> | @user.FirstName @user.LastName
+                    </label>
+                </div>
+            }
+        }
+
+    </div>
+
+
+    <div class="d-flex flex-column justify-content-between mt-5">
+        <button class="btn btn-outline-success" @onclick="HandleSubmitAsync">Reassign classes</button>
+        @if (OkMsg != null  && OkMsg.Length > 0)
+        {
+            <div class="alert-success alert mt-5">
+                @OkMsg
+            </div>
+        }
+
+        @if (Msg != null)
+        {
+            <div class="alert-danger alert mt-5">
+                @Msg
+            </div>
+        }
+    </div>
+</section>
+<a class="btn btn-outline-secondary mt-3" href="admin">Back to admin page</a>
+
+
+@code {
+
+    public string? Msg { get; set; }
+    public string? OkMsg { get; set; }
+    public string? SelectedClassId { get; set; }
+    public IEnumerable<ClassEntity> MyClasses { get; set; }
+    public IEnumerable<User> Users { get; set; }
+    public Dictionary<string,bool> CheckDictionary { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Msg = null;
+        OkMsg = null;
+        SelectedClassId = null;
+        MyClasses = new List<ClassEntity>();
+        CheckDictionary = new Dictionary<string, bool>();
+        Users = new List<User>();
+
+        await FetchClassesAsync();
+
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task FetchClassesAsync()
+    { 
+        try
+        {
+            MyClasses = await ClassService.GetAllAsync(UserHttpClient.Jwt, new SearchClassDTO{Username = null});
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+    private async Task FetchUsersAsync()
+    {
+        try
+        {
+            Users = (await UserService.GetAllAsync(UserHttpClient.Jwt)).ToList();
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+    private async Task HandleClassChangeAsync(ChangeEventArgs args)
+    {
+        OkMsg = null;
+        Msg = null;
+        SelectedClassId = args.Value.ToString();
+        Users = new List<User>();
+        CheckDictionary = new Dictionary<string, bool>(); 
+        if (SelectedClassId == null || SelectedClassId.Equals("")) return;
+
+        await FetchUsersAsync();
+  
+        foreach (User user in Users)
+        {
+            bool isParticipant = MyClasses.First(c => c.Id == SelectedClassId).Participants.Any(u => u.Username == user.Username);
+            CheckDictionary[user.Username] = isParticipant;
+        }
+
+    }
+
+    private async void HandleSubmitAsync()
+    {
+        if (SelectedClassId == "")
+        {
+            Msg = "No class selected :/";
+            return;
+        }
+        ClassUpdateDTO dto = new ClassUpdateDTO(SelectedClassId);
+
+        foreach (User user in Users)
+        {
+            if(CheckDictionary[user.Username])
+                dto.Participants.Add(user.Username);
+        }
+
+        bool updatedWithSuccess = false;
+        try
+        {
+            updatedWithSuccess = await ClassService.UpdateClass(UserHttpClient.Jwt, dto);
+            
+            
+            await FetchClassesAsync();
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+
+        if (updatedWithSuccess)
+            OkMsg = "Successfully updated assigning";
+    }
+
+}

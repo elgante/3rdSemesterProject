@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServer", "BlazorServer\BlazorServer.csproj", "{2824B5DC-52CD-4C74-9DF0-C45F76A2D3D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{D5292355-61F0-4285-93FD-69D91846D63F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClients", "HttpClients\HttpClients.csproj", "{29BA048D-E004-441E-8509-E88ED4541911}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2824B5DC-52CD-4C74-9DF0-C45F76A2D3D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2824B5DC-52CD-4C74-9DF0-C45F76A2D3D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2824B5DC-52CD-4C74-9DF0-C45F76A2D3D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2824B5DC-52CD-4C74-9DF0-C45F76A2D3D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5292355-61F0-4285-93FD-69D91846D63F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5292355-61F0-4285-93FD-69D91846D63F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5292355-61F0-4285-93FD-69D91846D63F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5292355-61F0-4285-93FD-69D91846D63F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29BA048D-E004-441E-8509-E88ED4541911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29BA048D-E004-441E-8509-E88ED4541911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29BA048D-E004-441E-8509-E88ED4541911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29BA048D-E004-441E-8509-E88ED4541911}.Release|Any CPU.Build.0 = Release|Any CPU
+    EndGlobalSection
+EndGlobal

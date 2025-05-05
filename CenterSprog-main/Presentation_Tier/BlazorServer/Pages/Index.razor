@@ -1,0 +1,35 @@
+﻿@page "/"
+@inject NavigationManager navMgr
+
+<div class="d-flex align-items-center w-100">
+    <div class="w-50 d-flex justify-content-center p-5">
+        <img src="img/logo.png" alt="Logo" class="w-75"/>
+    </div>
+    <AuthorizeView>
+        <NotAuthorized>
+            <div class="d-flex flex-column align-items-start justify-content-center p-5">
+                <h1 class="fw-bold">Become new member!</h1>
+                <h5>email@email.dk</h5>
+                <h5>+45 00 00 00 00</h5>
+                <h5>Already a member? Please <span class="text-primary button text-decoration-underline" onclick="@Login">Log In!</span></h5>
+            </div>
+        </NotAuthorized>
+        <Authorized>
+            <div class="d-flex flex-column align-items-start justify-content-center p-5">
+                <h1 class="fw-bold">Contact us!</h1>
+                <h5>email@email.dk</h5>
+                <h5>+45 00 00 00 00</h5>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+</div>
+
+@code{
+
+    private void Login()
+    {
+        navMgr.NavigateTo("/login");
+    }
+
+}

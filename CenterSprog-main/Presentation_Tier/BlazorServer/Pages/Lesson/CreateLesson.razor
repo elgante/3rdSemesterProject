@@ -1,0 +1,81 @@
+@page "/my-classes/{ClassId}/create-lesson"
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs.LessonDTO
+@using HttpClients.Implementations
+@using Microsoft.AspNetCore.Components
+@inject ILessonService lessonService
+@inject NavigationManager navMgr
+
+<div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Create Lesson</h3>
+        <button type="button" class="btn btn-light align-self-end" @onclick="@Close">
+            <span class="oi oi-x"></span>
+        </button>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" @bind="lessonDto.Topic">
+        <label for="floatingInput">Topic:</label>
+    </div>
+    <br />
+    <div class="form-floating mb-3">
+        <input type="date" class="form-control" id="floatingInput" @bind="Date">
+        <label for="floatingInput">Date</label>
+    </div>
+    <br />
+    <div class="form-floating">
+        <textarea class="form-control" id="floatingTextarea" @bind="lessonDto.Description"></textarea>
+        <label for="floatingTextarea">Description:</label>
+    </div>
+    <br />
+    @if (Msg != null)
+    {
+        <div class="alert-danger alert mt-5">
+            @Msg
+        </div>
+    }
+    <br />
+    <div class="button-row">
+        <button @onclick="CreateAsync" type="button" class="btn btn-success">Create Lesson</button>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public string ClassId { get; set; }
+
+    public LessonCreationDTO lessonDto;
+    public DateTime Date { get; set; }
+    private string? Msg;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Date = DateTime.Now;
+        Msg = null;
+        lessonDto = new LessonCreationDTO { ClassId = ClassId };
+        base.OnInitializedAsync();
+    }
+
+    public async Task CreateAsync()
+    {
+        try
+        {
+            lessonDto.Date = Date.ToFileTimeUtc();
+            var createdLesson = await lessonService.CreateAsync(UserHttpClient.Jwt, lessonDto);
+            navMgr.NavigateTo($"/my-classes/{ClassId}/lessons/{createdLesson.Id}");
+            Msg = "Lesson created successfully!";
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+    private void Close()
+    {
+        navMgr.NavigateTo($"/my-classes/{ClassId}");
+    }
+
+}

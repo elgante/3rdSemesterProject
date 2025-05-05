@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HttpClients\HttpClients.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\Admin\AdminOverviewUsers.razor" />
+      <AdditionalFiles Include="Pages\Admin\AdminRegister.razor" />
+      <AdditionalFiles Include="Pages\Admin\AdminUserDetails.razor" />
+      <AdditionalFiles Include="Pages\Class\ClassDetails.razor" />
+      <AdditionalFiles Include="Shared\Components\Admin\RegisterClassComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Admin\RegisterUserComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Attendance\ClassAttendanceComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Attendance\MarkAttendanceComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Attendance\SingleUserAttendanceComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Class\ParticipantsComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Homework\AssignHomeworkComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Homework\HandInHomeworkComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Homework\SeeFeedbackComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Homework\ViewSubmittedHomeworksComponent.razor" />
+      <AdditionalFiles Include="Shared\Components\Lesson\LessonDetailComponent.razor" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+﻿@_parsedDate.Day/@_parsedDate.Month/@_parsedDate.Year
+
+@code {
+    [Parameter]
+    public long Date { get; set; }
+    private DateTime _parsedDate { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _parsedDate = DateTime.FromFileTimeUtc(Date);
+        base.OnInitialized();
+    }
+
+}

@@ -1,0 +1,82 @@
+﻿@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs.HomeworkDTO
+@using HttpClients.Implementations
+@inject NavigationManager navMgr
+@inject ILessonService lessonService
+@inject IHandInHomeworkService HandInHomeworkService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+<div class="submitted-container">
+    <button @onclick="ViewSubmittedHomeworks" type="button">
+        <strong>View submitted homeworks</strong>
+    </button>
+</div>
+
+@code {
+
+    [Parameter]
+    public string lessonId { get; set; }
+    [Parameter]
+    public string classId { get; set; }
+    public string Msg { get; set; }
+    Homework Homework { get; set; }
+    Lesson Lesson { get; set; }
+    HandInHomework HandInHomework { get; set; }
+
+    public bool HomeworkSubmitted { get; set; }
+    public string Answer { get; set; }
+    public bool ShowModal { get; set; }
+    public string StudentUsername { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Lesson = await lessonService.GetByIdAsync(UserHttpClient.Jwt, lessonId);
+        Msg = null;
+        Answer = null;
+        HomeworkSubmitted = false;
+        Homework = new Homework();
+        HandInHomework = new HandInHomework();
+        ShowModal = false;
+        StudentUsername = null;
+        
+        await FetchHandinsAsync();
+        
+        base.OnInitializedAsync();
+    }
+    private async Task FetchHandinsAsync()
+    {
+        try
+        {
+            Msg = null;
+            Lesson = await lessonService.GetByIdAsync(UserHttpClient.Jwt, lessonId);
+            Homework = Lesson.Homework;
+            
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            var username = user.Identity?.Name;
+            
+            try
+            {
+                HandInHomework = await HandInHomeworkService.GetHandInByHomeworkIdAndStudentUsernameAsync(UserHttpClient.Jwt, Homework.Id, username);
+
+                HomeworkSubmitted = HandInHomework != null;
+            }
+            catch (Exception e)
+            {
+                HomeworkSubmitted = false;
+                Msg = e.Message;
+            }
+        }
+        catch (Exception e)
+        {
+            Msg = e.Message;
+        }
+    }
+
+    private void ViewSubmittedHomeworks()
+    {
+        var homeworkId = Homework.Id;
+        navMgr.NavigateTo($"/homeworks/{homeworkId}");
+    }
+}
