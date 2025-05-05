@@ -1,8 +1,8 @@
-CenterSprog
-SEP3 Project - 2023
+CenterSprog. 
+SEP3 Project - 2023. 
 A team of 4.
-System information
-A distributed system consisting of 3 tiers; Presentation Tier implemented as a Blazor Server Application, Business Logic Tier with C#, and Data Tier done in Java using PostgreSQL for Database.
+System information: 
+A distributed system consisting of 3 tiers: Presentation Tier implemented as a Blazor Server Application, Business Logic Tier with C#, and Data Tier done in Java using PostgreSQL for Database.
 
 The Main Frameworks helping us achieve the solution were .NET and Spring Boot
 
